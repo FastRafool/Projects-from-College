@@ -1,0 +1,214 @@
+#include <iostream>
+using namespace std;
+/* rand example: guess the number */
+#include <sstream>
+#include <stdio.h>  /* printf, scanf, puts, NULL */
+#include <stdlib.h> /* srand, rand */
+#include <string>
+#include <time.h> /* time */
+void hex_string(char str[]);
+
+
+#include <iomanip>
+#include <iostream>
+using namespace std;
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+
+#endif
+
+void timer(); 
+
+int main() {
+  int n = 1, length, totalscore = 0;
+  int round = 0; // keep track of rounds
+  int response;
+  unsigned int d;
+  int chance = 0;
+  char yn;
+
+  // setting up the hex number
+  char hex[30];
+  srand(time(0));
+  hex_string(hex);
+
+  cout << "Convert this hexadecimal number into decimal" << endl;
+  cout << hex << endl;
+
+  std::istringstream iss(hex);
+  iss >> std::hex >> d;
+
+  // cout << d << std::endl; // DONT FORGET TO DELETE THIS POST TESTING
+  cout << endl
+       << "Enter the decimal value and if the value is correct earn 100 "
+          "points. This will repeat until you quit. "
+          "If you wish to quit, please type a number less then 0."
+       << endl;
+
+  cin >> response; // first response in case they wish to quit
+  cout << endl;
+ //timer();
+  
+  while (round < 12 || response > 0) {
+    // while loop for 10 rounds or they quit
+		
+    round++; // increment round
+
+    if (response == d) { // the response and situation if they get it right
+
+      cout << "Correct + 100!!!" << endl << endl;
+      totalscore = totalscore + 100;
+
+    } else if (response < 0) { // they want to quit
+
+      while (chance < 1) {
+
+        cout << "Are you sure you would like to quit?" << endl;
+				
+        cout << "y/n?" << endl;
+				
+        cin >> yn;
+				
+        if (yn == 'y' or yn == 'Y') { // if they wish to quit
+
+          cout << "Thank you for trying our game at least!" << endl;
+					
+          cout << "Your score was: " << totalscore;
+					
+          return 0;
+					
+        } else if (yn == 'n' or
+                   yn == 'N') { // if they change their mind and continue
+				
+          cout << "Ok, we will continue the game then." << endl;
+					
+          cout << "no points this round." << endl << endl;
+					
+          chance = 2;
+					
+        } else { // if they don't answer either
+          
+          cout << "That is not a valid response." << endl;
+          
+        }
+        
+      }
+      
+      chance = 0;
+			
+    } else { // response/situation if they get it wrong
+			
+      cout << "Incorrect" << endl;
+			
+      cout << "Would you like to try again for half points?" << endl;
+			
+      cout << "y/n" << endl;
+			
+      cin >> yn;
+			
+      if (yn == 'y' or yn == 'Y') { // if they choose to go again
+        
+				cout << "Would you like a hint for -25 points?" << endl;
+        
+        cin >> yn;
+
+        cout << endl;
+        
+        if (yn == 'y' or yn == 'Y') {
+          
+          if (response < d) {
+            
+            cout << "Your answer was smaller than the correct answer." << endl;
+            
+          } else {
+            
+            cout << "Your answer was greater than the correct answer." << endl;
+            
+          }
+
+          cout << endl;
+          totalscore -= 25;
+          
+        }
+          
+          cout << "Here is you're one other chance: ";
+        
+          cin >> response;
+				
+          if (response == d) { // half points for getting it correct
+            
+            cout << "Correct! +50 points!" << endl << endl;
+            
+            totalscore += 50;
+					
+        } else {
+            
+          cout << "Incorrect." << endl;
+            
+        }
+        
+      } else { // if they don't and take the loss
+        
+        cout << "0 points this round." << endl;
+        
+      }
+      
+    }
+
+    hex_string(hex);
+		
+    cout << "Your next number is: ";
+		
+    cout << hex << endl;
+
+    std::istringstream iss(hex);
+    iss >> std::hex >> d;
+		
+    // cout << d << std::endl; // GET RID OF THIS WHEN TURNING IN AS WELL
+		
+    cin >> response; // next round answer
+    cout << endl;
+    // cout << round << endl; // check the round count
+    if (round >= 12) {
+      break;
+    }
+  }
+
+  cout << "Your final score was: " << totalscore << "." << endl;
+	
+  // we can put our score keeping here if we need
+  return 0;
+	
+}
+
+void hex_string(char str[]) {
+	
+  char hex_ch[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+                   '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	
+  str[0] = hex_ch[rand() % 16];
+	
+  str[1] = hex_ch[rand() % 16];
+}
+
+
+// void timer()
+// {
+// 				for (int sec = 5; sec < 6; sec--)
+//  {
+//       cout << setw(2) << "TIME IS RUNNING: " <<sec;
+//       cout.flush();
+
+//       sleep(1);
+//       cout << '\r';
+//       if (sec == 0)
+//       {
+//       cout << "Times up - program terminated" << endl;
+//       }
+//       if (sec <1)
+//       break;
+//     }
+// 	return(0);
+//}
